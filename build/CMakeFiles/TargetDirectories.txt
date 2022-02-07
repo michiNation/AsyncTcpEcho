@@ -1,0 +1,3 @@
+/home/michael/cppCode/ClientTCP/build/CMakeFiles/rebuild_cache.dir
+/home/michael/cppCode/ClientTCP/build/CMakeFiles/edit_cache.dir
+/home/michael/cppCode/ClientTCP/build/CMakeFiles/TcpProg.dir
