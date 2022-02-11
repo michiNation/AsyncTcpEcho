@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/michael/cppCode/ClientTCP/src/TcpClient.cpp" "/home/michael/cppCode/ClientTCP/build/CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o"
-  "/home/michael/cppCode/ClientTCP/src/TcpServer.cpp" "/home/michael/cppCode/ClientTCP/build/CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o"
-  "/home/michael/cppCode/ClientTCP/src/main.cpp" "/home/michael/cppCode/ClientTCP/build/CMakeFiles/TcpProg.dir/src/main.cpp.o"
+  "/home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp" "/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o"
+  "/home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp" "/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o"
+  "/home/michael/cppCode/AsyncTcpEcho/src/main.cpp" "/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles/TcpProg.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

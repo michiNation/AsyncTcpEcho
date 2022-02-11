@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++17
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/michael/cppCode/ClientTCP/inc 
+CXX_INCLUDES = -I/home/michael/cppCode/AsyncTcpEcho/inc 
 

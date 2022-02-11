@@ -56,14 +56,6 @@ netdb.h
 AsyncTcpSocket.h
 ../inc/AsyncTcpSocket.h
 
-../inc/TcpClient.h
-IAsyncSocketCallbacks.h
-../inc/IAsyncSocketCallbacks.h
-AsyncTcpSocket.h
-../inc/AsyncTcpSocket.h
-mutex
--
-
 ../inc/TcpServer.h
 TcpServerSocket.h
 ../inc/TcpServerSocket.h
@@ -80,23 +72,9 @@ IServerCallbacks.h
 vector
 -
 
-/home/michael/cppCode/ClientTCP/src/TcpClient.cpp
-TcpClient.h
-/home/michael/cppCode/ClientTCP/src/TcpClient.h
-
-/home/michael/cppCode/ClientTCP/src/TcpServer.cpp
+/home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp
 TcpServer.h
-/home/michael/cppCode/ClientTCP/src/TcpServer.h
+/home/michael/cppCode/AsyncTcpEcho/src/TcpServer.h
 TcpServerSocket.h
-/home/michael/cppCode/ClientTCP/src/TcpServerSocket.h
-
-/home/michael/cppCode/ClientTCP/src/main.cpp
-iostream
-/home/michael/cppCode/ClientTCP/src/iostream
-AsyncTcpSocket.h
-/home/michael/cppCode/ClientTCP/src/AsyncTcpSocket.h
-TcpClient.h
-/home/michael/cppCode/ClientTCP/src/TcpClient.h
-TcpServer.h
-/home/michael/cppCode/ClientTCP/src/TcpServer.h
+/home/michael/cppCode/AsyncTcpEcho/src/TcpServerSocket.h
 

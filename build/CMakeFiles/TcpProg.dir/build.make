@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/michael/cppCode/ClientTCP
+CMAKE_SOURCE_DIR = /home/michael/cppCode/AsyncTcpEcho
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/michael/cppCode/ClientTCP/build
+CMAKE_BINARY_DIR = /home/michael/cppCode/AsyncTcpEcho/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/TcpProg.dir/depend.make
@@ -59,42 +59,42 @@ include CMakeFiles/TcpProg.dir/flags.make
 
 CMakeFiles/TcpProg.dir/src/main.cpp.o: CMakeFiles/TcpProg.dir/flags.make
 CMakeFiles/TcpProg.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/michael/cppCode/ClientTCP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/TcpProg.dir/src/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TcpProg.dir/src/main.cpp.o -c /home/michael/cppCode/ClientTCP/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/TcpProg.dir/src/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TcpProg.dir/src/main.cpp.o -c /home/michael/cppCode/AsyncTcpEcho/src/main.cpp
 
 CMakeFiles/TcpProg.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TcpProg.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/michael/cppCode/ClientTCP/src/main.cpp > CMakeFiles/TcpProg.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/michael/cppCode/AsyncTcpEcho/src/main.cpp > CMakeFiles/TcpProg.dir/src/main.cpp.i
 
 CMakeFiles/TcpProg.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TcpProg.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/michael/cppCode/ClientTCP/src/main.cpp -o CMakeFiles/TcpProg.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/michael/cppCode/AsyncTcpEcho/src/main.cpp -o CMakeFiles/TcpProg.dir/src/main.cpp.s
 
 CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o: CMakeFiles/TcpProg.dir/flags.make
 CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o: ../src/TcpClient.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/michael/cppCode/ClientTCP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o -c /home/michael/cppCode/ClientTCP/src/TcpClient.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o -c /home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp
 
 CMakeFiles/TcpProg.dir/src/TcpClient.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TcpProg.dir/src/TcpClient.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/michael/cppCode/ClientTCP/src/TcpClient.cpp > CMakeFiles/TcpProg.dir/src/TcpClient.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp > CMakeFiles/TcpProg.dir/src/TcpClient.cpp.i
 
 CMakeFiles/TcpProg.dir/src/TcpClient.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TcpProg.dir/src/TcpClient.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/michael/cppCode/ClientTCP/src/TcpClient.cpp -o CMakeFiles/TcpProg.dir/src/TcpClient.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp -o CMakeFiles/TcpProg.dir/src/TcpClient.cpp.s
 
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: CMakeFiles/TcpProg.dir/flags.make
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: ../src/TcpServer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/michael/cppCode/ClientTCP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o -c /home/michael/cppCode/ClientTCP/src/TcpServer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o -c /home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp
 
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TcpProg.dir/src/TcpServer.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/michael/cppCode/ClientTCP/src/TcpServer.cpp > CMakeFiles/TcpProg.dir/src/TcpServer.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp > CMakeFiles/TcpProg.dir/src/TcpServer.cpp.i
 
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TcpProg.dir/src/TcpServer.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/michael/cppCode/ClientTCP/src/TcpServer.cpp -o CMakeFiles/TcpProg.dir/src/TcpServer.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp -o CMakeFiles/TcpProg.dir/src/TcpServer.cpp.s
 
 # Object files for target TcpProg
 TcpProg_OBJECTS = \
@@ -110,7 +110,7 @@ TcpProg: CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o
 TcpProg: CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o
 TcpProg: CMakeFiles/TcpProg.dir/build.make
 TcpProg: CMakeFiles/TcpProg.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/michael/cppCode/ClientTCP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable TcpProg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable TcpProg"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TcpProg.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -123,6 +123,6 @@ CMakeFiles/TcpProg.dir/clean:
 .PHONY : CMakeFiles/TcpProg.dir/clean
 
 CMakeFiles/TcpProg.dir/depend:
-	cd /home/michael/cppCode/ClientTCP/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/michael/cppCode/ClientTCP /home/michael/cppCode/ClientTCP /home/michael/cppCode/ClientTCP/build /home/michael/cppCode/ClientTCP/build /home/michael/cppCode/ClientTCP/build/CMakeFiles/TcpProg.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/michael/cppCode/AsyncTcpEcho/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/michael/cppCode/AsyncTcpEcho /home/michael/cppCode/AsyncTcpEcho /home/michael/cppCode/AsyncTcpEcho/build /home/michael/cppCode/AsyncTcpEcho/build /home/michael/cppCode/AsyncTcpEcho/build/CMakeFiles/TcpProg.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/TcpProg.dir/depend
 

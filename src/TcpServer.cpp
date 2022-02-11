@@ -10,8 +10,16 @@ void TcpServer::OnNewConnection(std::shared_ptr<AsyncTcpSocket> socket)
 
 void TcpServer::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket* socket)
 {
-    std::string str(buf);
-    std::cout << "Recived from " << socket->ClientAddress() << ": " << str << std::endl;
+    if(size <= 0){return;}
+    std::string message = "";
+    if(size > 15){
+        std::string str(buf[0],buf[15]);
+        message = str;
+    }else{
+        std::string str(buf);
+        message = str;
+    }
+    std::cout << "Recived from " << socket->ClientAddress() << " size: " << std::to_string(size) << " : " << message << std::endl;
     socket->WriteAsync(buf,size);
 }
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/michael/cppCode/ClientTCP
+# Install script for directory: /home/michael/cppCode/AsyncTcpEcho
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/michael/cppCode/ClientTCP/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/michael/cppCode/AsyncTcpEcho/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

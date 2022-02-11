@@ -3,21 +3,25 @@
 
 CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o
  ../inc/AsyncTcpSocket.h
+ ../inc/FileAbstraction.h
  ../inc/IAsyncSocketCallbacks.h
+ ../inc/StopWatch.h
  ../inc/TcpClient.h
- /home/michael/cppCode/ClientTCP/src/TcpClient.cpp
+ /home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o
  ../inc/AsyncTcpSocket.h
  ../inc/IAsyncSocketCallbacks.h
  ../inc/IServerCallbacks.h
  ../inc/TcpServer.h
  ../inc/TcpServerSocket.h
- /home/michael/cppCode/ClientTCP/src/TcpServer.cpp
+ /home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp
 CMakeFiles/TcpProg.dir/src/main.cpp.o
  ../inc/AsyncTcpSocket.h
+ ../inc/FileAbstraction.h
  ../inc/IAsyncSocketCallbacks.h
  ../inc/IServerCallbacks.h
+ ../inc/StopWatch.h
  ../inc/TcpClient.h
  ../inc/TcpServer.h
  ../inc/TcpServerSocket.h
- /home/michael/cppCode/ClientTCP/src/main.cpp
+ /home/michael/cppCode/AsyncTcpEcho/src/main.cpp
