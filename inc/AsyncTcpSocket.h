@@ -165,6 +165,10 @@ public:
         listenThread.detach();
     }
 
+    int ReadBytes(std::vector<uint8_t>&bytes, size_t size){
+       return recv(this->sock, &bytes[0], size, 0);
+    }
+
     void TimeToClose(){
         isTimeToClose = true;
     }

@@ -11,6 +11,8 @@ public:
 
     virtual ~TcpServer(){};
 
+    void StartDownload(const AsyncTcpSocket* socket);
+
     virtual void OnNewConnection(std::shared_ptr<AsyncTcpSocket> socket) override;
 
     virtual void OnBytesReceived(const char *buf, int size, const AsyncTcpSocket* socket)  override;

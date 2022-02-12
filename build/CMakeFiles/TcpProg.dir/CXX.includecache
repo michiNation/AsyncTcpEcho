@@ -58,6 +58,10 @@ unistd.h
 netdb.h
 -
 
+../inc/IServerCallbacks.h
+AsyncTcpSocket.h
+../inc/AsyncTcpSocket.h
+
 ../inc/StopWatch.h
 chrono
 -
@@ -82,7 +86,31 @@ FileAbstraction.h
 mutex
 -
 
+../inc/TcpServer.h
+TcpServerSocket.h
+../inc/TcpServerSocket.h
+
+../inc/TcpServerSocket.h
+AsyncTcpSocket.h
+../inc/AsyncTcpSocket.h
+IAsyncSocketCallbacks.h
+../inc/IAsyncSocketCallbacks.h
+thread
+-
+IServerCallbacks.h
+../inc/IServerCallbacks.h
+vector
+-
+
 /home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp
 TcpClient.h
 /home/michael/cppCode/AsyncTcpEcho/src/TcpClient.h
+
+/home/michael/cppCode/AsyncTcpEcho/src/TcpServer.cpp
+TcpServer.h
+/home/michael/cppCode/AsyncTcpEcho/src/TcpServer.h
+TcpServerSocket.h
+/home/michael/cppCode/AsyncTcpEcho/src/TcpServerSocket.h
+FileAbstraction.h
+/home/michael/cppCode/AsyncTcpEcho/src/FileAbstraction.h
 

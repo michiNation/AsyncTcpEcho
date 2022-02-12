@@ -9,6 +9,7 @@ CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o: ../inc/TcpClient.h
 CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o: ../src/TcpClient.cpp
 
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: ../inc/AsyncTcpSocket.h
+CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: ../inc/FileAbstraction.h
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: ../inc/IAsyncSocketCallbacks.h
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: ../inc/IServerCallbacks.h
 CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o: ../inc/TcpServer.h

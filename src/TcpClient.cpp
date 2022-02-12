@@ -4,8 +4,8 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
 {
     if(size <= 0){return;}
     std::string message = "";
-    if(size > 15){
-        std::string str(buf[0],buf[15]);
+    if(size > MAXTOSTRING){
+        std::string str(&buf[0],&buf[15]);
         message = str;
     }else{
         std::string str(buf);
@@ -31,6 +31,29 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         }
         case TESTTYPE::STARTDOWNLOADCLOSE:
         {
+            if(!startDownload){
+                std::string str(&buf[0],&buf[9]);
+                fileSize = std::stoi(str);
+                LOG("Start Download - Filesize: " + std::to_string(fileSize) + " Received Bytes: " + std::to_string(size));
+                downloadFile = std::make_unique<FileAbstraction>(false);
+                //downloadFile->LodeFile("../VideoFileDownload.MOV");
+                downloadFile->LodeFile("../BigFile1GBdw.zip");
+                startDownload = true;
+            }else{
+                LOG("Next Chunk of: " + std::to_string(size) + " Bytessum: " + std::to_string(bytesReceived));
+                
+                bytesReceived += size;
+                downloadFile->WriteBytes(buf, size);
+                LOG("Written to file");
+            }
+
+            if(bytesReceived >= fileSize){
+                std::lock_guard<std::mutex> guard(mutex);
+                finishedDownload = true;
+                LOG("Finished Download. Bytessum: " + std::to_string(bytesReceived));
+            }
+            sw->ReceivedEvent("message");
+            return;
             break;
         }
         case TESTTYPE::STARTFIREDOWNLOADCLOSE:
@@ -39,8 +62,7 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         default:
             break;
         }
-    sw->Stop();
-    sw->CreateLogEntry(false, message);
+    sw->ReceivedEvent(message);
     LOG("Recived: " + message);
 }
 
@@ -51,10 +73,12 @@ void TcpClient::OnSocketConnectionChanged(ConnectionState state, const AsyncTcpS
         std::lock_guard<std::mutex> guard(mutex);
         isconnected = true;
         LOG("Connected");
+        sw->ConnectedEvent();
     }
     else
     {
         LOG("Disconnected");
+        sw->DisconnectedEvent();
         sw->CloseFile();
     }
 }
@@ -64,7 +88,7 @@ void TcpClient::OnBytesWritten(int bytes)
     LOG("Bytes Written: " + bytes);
 }
 
-void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype)
+void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t loops)
 {
     this->testType = testtype;
     sw->CreateFile("TcpTest",getStringfromTesttype(static_cast<int>(testtype)),"TCP+STunnel");
@@ -74,13 +98,11 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype)
         return isconnected;
         }; 
     auto socket = std::make_shared<AsyncTcpSocket>(this);
+    asyncSocket = socket;
 
     if (socket)
     {
         LOG("Timepoint Start: " +  std::to_string(sw->getCurrentTimeMs()));
-        sw->Start();
-        start = sw->getCurrentTime();
-        sleep(1);
         socket->ConnectSocketAsync(ip, port);
         waitFor(checkConnection, 10, 2000);
         socket->ReadAsync();
@@ -124,7 +146,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype)
         case TESTTYPE::STARTFIRECLOSE:
         {
             std::string message = "HelloFromClient";
-            sw->CreateLogEntry(true, message);
+            sw->SendEvent(message);
             socket->WriteAsync(message.c_str(), message.length());
             LOG("Timepoint write: " + std::to_string(sw->getCurrentTimeMs()));
             waitFor([=](){
@@ -139,32 +161,22 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype)
         {
             //todo check if file input is read
             FileAbstraction fa(true);
-            fa.LodeFile("../MaxPackageFile");
+            fa.LodeFile("../Files/MaxPackageFile1");
             size_t filesize = fa.GetFileSize();
             std::vector<uint8_t> v = fa.ReadBytes(filesize);
-            LOG("1");
-            LOG("Filesize: " + std::to_string(filesize));
-            LOG("2");
-            LOG("Vectorsize: " + std::to_string(v.size()));
-            LOG("3");
             std::string str(v.begin(), v.begin()+15);
-            LOG("FirstFewBytes: " + str );
-            sw->CreateLogEntry(true, "MaxPackageFileMessage");
-            LOG("4");
             int i = 0;
-            while(i < 10){
-                LOG("5");
-                socket->WriteAsync((const char *) v.data(),v.size());
+            while(i < loops){
+                sw->SendEvent(str);
+                socket->WriteAsync((const char *) &v[0],v.size());
                     waitFor([=](){
                 std::lock_guard<std::mutex> guard(mutex);
                 return isreceived;}, 10, 5000);
-                LOG("6");
                 {
                     std::lock_guard<std::mutex> guard(mutex);
                     isreceived = false;
                 }
                 i++;
-                LOG("7");
             }
             socket->TimeToClose();
             socket->Close();
@@ -173,10 +185,20 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype)
         }
         case TESTTYPE::STARTDOWNLOADCLOSE:
         {
+            socket->Write("Download");
+            waitFor([=](){
+                std::lock_guard<std::mutex> guard(mutex);
+                return finishedDownload;}, 100, (1000 * 60 * 30)); //timeout 30 min
+
+            socket->TimeToClose();
+            socket->Close();
+            downloadFile->CloseFile();
             break;
         }
         case TESTTYPE::STARTFIREDOWNLOADCLOSE:
-        {    break;
+        {    
+            //would actually mean have to instances off the client and start usecase 2 and 3 together !
+            break;
         }
         default:
             break;
@@ -187,9 +209,13 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype)
 
 void TcpClient::OnError(std::string err)
 {
-    std::cerr << "Error: " << err << std::endl;
+    if(ERRORLOG_ON){
+        std::cerr << "Error: " << err << std::endl;
+    }
 }
 
 void TcpClient::LOG(std::string log) {
-    std::cout << "Log: " << log << std::endl;
+    if(LOG_ON){
+        std::cout << "Log: " << log << std::endl;
+    }
 }

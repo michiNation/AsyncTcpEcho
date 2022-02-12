@@ -1,10 +1,10 @@
 #include "TcpServer.h"
 #include "TcpServerSocket.h"
-
+#include "FileAbstraction.h"
 
 void TcpServer::OnNewConnection(std::shared_ptr<AsyncTcpSocket> socket)
 {
-    std::cout << "New Connection: " << socket->ClientAddress() << std::endl;
+    LOG("New Connection: " + socket->ClientAddress());
     socket->SetCallback(this);
 }
 
@@ -12,42 +12,69 @@ void TcpServer::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
 {
     if(size <= 0){return;}
     std::string message = "";
-    if(size > 15){
-        std::string str(buf[0],buf[15]);
+    if(size > MAXTOSTRING){
+        std::string str(&buf[0],&buf[15]);
         message = str;
     }else{
         std::string str(buf);
         message = str;
     }
-    std::cout << "Recived from " << socket->ClientAddress() << " size: " << std::to_string(size) << " : " << message << std::endl;
-    socket->WriteAsync(buf,size);
+    auto found = message.find("Download");
+    if(found != std::string::npos){
+        StartDownload(socket);
+    }
+    else{
+        LOG("Recived from " + socket->ClientAddress() + " size: " + std::to_string(size) + " : " + message);
+        socket->WriteAsync(buf,size);
+    }
+
+}
+
+void TcpServer::StartDownload(const AsyncTcpSocket* socket){
+    //prep stuff
+    uint16_t CHUNCKSIZE = 65000;
+    LOG("Download requested");
+    FileAbstraction fa(true);
+    //fa.LodeFile("../Files/video.MOV");
+    fa.LodeFile("../Files/BigFile1GB.zip");
+    auto size = fa.GetFileSize();
+    std::vector<uint8_t> v(CHUNCKSIZE);
+    
+    //send file size
+    auto sent = socket->Write(std::to_string(size));
+    LOG("Sent size: " + std::to_string(size) + " sent bytes: " + std::to_string(sent));
+    //loop and read CHUNCKSIZE bytes from the file and send them to the client
+    while(size > 0){
+        //todo check why download is not working after a few packages
+        if(size >= CHUNCKSIZE){
+            size = size - CHUNCKSIZE;
+        }
+        else{
+            CHUNCKSIZE = size;
+            size = 0;
+        }
+        v = fa.ReadBytes(CHUNCKSIZE);
+        auto sent = socket->Write((const char *)&v[0], v.size());
+        LOG("Size: " + std::to_string(size) + " sent: " + std::to_string(sent));
+    }
 }
 
 void TcpServer::OnSocketConnectionChanged(ConnectionState state, const AsyncTcpSocket* sock)
 {
     if (ConnectionState::Connected == state)
     {
-        std::cout << "Connected " << sock->ClientAddress() << std::endl;
+        LOG("Connected " + sock->ClientAddress());
     }
     else
     {
-        std::cout << "Disconnected " << sock->ClientAddress() << std::endl;
+        LOG("Disconnected " + sock->ClientAddress());
     }
 }
 
-void TcpServer::OnError(std::string err)
-{
-    std::cerr << "Error: " << err << std::endl;
-}
 
 void TcpServer::OnBytesWritten(int bytes)
 {
-    std::cout << "OnBytesWritten: " << std::to_string(bytes) << std::endl;
-}
-
-void TcpServer::LOG(std::string log) 
-{
-    std::cout << "LOG: " << log << std::endl;
+    LOG("OnBytesWritten: " + std::to_string(bytes));
 }
 
 void TcpServer::Start(std::string ip, uint16_t port){
@@ -67,4 +94,17 @@ void TcpServer::Start(std::string ip, uint16_t port){
     }
 
     server->Close();
+}
+
+void TcpServer::OnError(std::string err)
+{
+    if(ERRORLOG_ON){
+        std::cerr << "Error: " << err << std::endl;
+    }
+}
+
+void TcpServer::LOG(std::string log) {
+    if(LOG_ON){
+        std::cout << "Log: " << log << std::endl;
+    }
 }

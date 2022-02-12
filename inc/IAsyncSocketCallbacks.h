@@ -18,6 +18,10 @@
         Disconnected = 2,
     };
 
+    constexpr int MAXTOSTRING = 33;
+    constexpr bool LOG_ON = true;
+    constexpr bool ERRORLOG_ON = true;
+
 //helpers
 /**
  * Used to wait for *waitForTrue* Lamda.
@@ -36,6 +40,9 @@ static void waitFor(std::function<bool(void)> waitForTrue, int sleepms, int time
         }
        // std::cout << "next round" << std::endl;
     }
+}
+static void Sleep(int sleepms){
+    std::this_thread::sleep_for(std::chrono::milliseconds(sleepms));
 }
 
 static std::string ipToString(sockaddr_in addr)
@@ -59,6 +66,4 @@ public:
     virtual void OnBytesWritten(int bytes) = 0;
 
     virtual void LOG(std::string log) = 0;
-
-
 };

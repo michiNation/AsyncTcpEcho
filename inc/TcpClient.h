@@ -61,6 +61,16 @@ private:
     Timepoint start;
     Timepoint stop;
 
+    //download stuff
+    uint32_t bytesReceived = 0;
+    uint32_t fileSize = 0;
+    bool finishedDownload = false;
+    bool startDownload = false;
+    std::unique_ptr<FileAbstraction> downloadFile;
+
+    //socket
+    std::shared_ptr<AsyncTcpSocket> asyncSocket;
+
 public:
     TcpClient() = default;
     virtual ~TcpClient() {};
@@ -73,7 +83,7 @@ public:
 
     virtual void OnBytesWritten(int bytes) override;
 
-    void Start(std::string ip, uint16_t port, TESTTYPE testtype);
+    void Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t loops = 10);
 
     virtual void LOG(std::string log) override;
 };

@@ -12,8 +12,8 @@ int64_t ofStreamBytesWritten = 0;
 
 bool isInstreamFile{false};
 public:
-    FileAbstraction(bool instream){
-        this->isInstreamFile = instream;
+    FileAbstraction(bool IwantToReadaFile){
+        this->isInstreamFile = IwantToReadaFile;
     }
 
     void LodeFile(std::string path){
@@ -48,6 +48,15 @@ public:
             if(ofStream.is_open()){
                 ofStreamBytesWritten+= bytes.size();
                 ofStream.write((const char*)&bytes[0], bytes.size());        
+            }
+        }
+    }
+
+
+    void WriteBytes(const char * bytes, int size){
+        if(!isInstreamFile){
+            if(ofStream.is_open()){
+                ofStream.write(bytes, size);        
             }
         }
     }
