@@ -64,18 +64,18 @@ public:
         this->stop = this->getCurrentTime();
     }
 
-    static std::chrono::milliseconds::rep getTimeDif(Timepoint start, Timepoint stop){
-        return std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+    static std::chrono::milliseconds::rep getTimeDifMicroSec(Timepoint start, Timepoint stop){
+        return std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
     }
 
     void CreateLogEntry(std::string eventstr, std::string message, Timepoint start, Timepoint stop){
         std::lock_guard<std::mutex> guard(lock);
-        stream << GetUtcString() << ","  << "," << eventstr << "," << getTimeDif(start, stop) << "," << message << std::endl;
+        stream << GetUtcString() << "," << eventstr << "," << getTimeDifMicroSec(start, stop) << "," << message << std::endl;
     }
 
     void CreateLogEntry(std::string eventstr, std::string message){
         std::lock_guard<std::mutex> guard(lock);
-        stream  << GetUtcString() << ","  << "," << eventstr << "," << getTimeDif(this->start, this->stop) << "," << message << std::endl;
+        stream  << GetUtcString() << "," << eventstr << "," << getTimeDifMicroSec(this->start, this->stop) << "," << message << std::endl;
     }
 
     void ConnectedEvent(std::string message = ""){

@@ -102,6 +102,10 @@ IServerCallbacks.h
 vector
 -
 
+/home/michael/cppCode/AsyncTcpEcho/src/TcpClient.cpp
+TcpClient.h
+/home/michael/cppCode/AsyncTcpEcho/src/TcpClient.h
+
 /home/michael/cppCode/AsyncTcpEcho/src/main.cpp
 iostream
 /home/michael/cppCode/AsyncTcpEcho/src/iostream

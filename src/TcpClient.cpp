@@ -19,12 +19,16 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         }
         case TESTTYPE::STARTFIRECLOSE:
         {
+            sw->Stop();
+            sw->CreateLogEntry("RTT", "StartFireClose");
             std::lock_guard<std::mutex> guard(mutex);
             isreceived = true;
             break;
         }
         case TESTTYPE::STARTLOOPCLOSE:
         {
+            sw->Stop();
+            sw->CreateLogEntry("RTT", "StartLoopClose");
             std::lock_guard<std::mutex> guard(mutex);
             isreceived = true;
             break;
@@ -53,8 +57,10 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
                 LOG("Finished Download. Bytessum: " + std::to_string(bytesReceived));
             }
             sw->ReceivedEvent("message");
+            sw->Stop();
+            sw->CreateLogEntry("RTT", "Downloaded");
             return;
-            break;
+            //break;
         }
         case TESTTYPE::STARTFIREDOWNLOADCLOSE:
         {    break;
@@ -91,7 +97,7 @@ void TcpClient::OnBytesWritten(int bytes)
 void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t loops)
 {
     this->testType = testtype;
-    sw->CreateFile("TcpTest",getStringfromTesttype(static_cast<int>(testtype)),"TCP+STunnel");
+    sw->CreateFile(("TcpTest_" + sw->GetUtcString()) ,getStringfromTesttype(static_cast<int>(testtype)),"TCP+STunnel");
 
     auto checkConnection = [=](){
         std::lock_guard<std::mutex> guard(mutex);
@@ -103,6 +109,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
     if (socket)
     {
         LOG("Timepoint Start: " +  std::to_string(sw->getCurrentTimeMs()));
+        LOG("UseCase: " + std::to_string(testtype) + " Loops:" + std::to_string(loops));
         socket->ConnectSocketAsync(ip, port);
         waitFor(checkConnection, 10, 2000);
         socket->ReadAsync();
@@ -147,6 +154,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
         {
             std::string message = "HelloFromClient";
             sw->SendEvent(message);
+            sw->Start();
             socket->WriteAsync(message.c_str(), message.length());
             LOG("Timepoint write: " + std::to_string(sw->getCurrentTimeMs()));
             waitFor([=](){
@@ -161,13 +169,15 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
         {
             //todo check if file input is read
             FileAbstraction fa(true);
-            fa.LodeFile("../Files/MaxPackageFile1");
+            fa.LodeFile("../Files/MaxPackageFile");
             size_t filesize = fa.GetFileSize();
             std::vector<uint8_t> v = fa.ReadBytes(filesize);
             std::string str(v.begin(), v.begin()+15);
             int i = 0;
+            LOG("Loops: " + loops);
             while(i < loops){
                 sw->SendEvent(str);
+                sw->Start();
                 socket->WriteAsync((const char *) &v[0],v.size());
                     waitFor([=](){
                 std::lock_guard<std::mutex> guard(mutex);
@@ -185,6 +195,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
         }
         case TESTTYPE::STARTDOWNLOADCLOSE:
         {
+            sw->Start();
             socket->Write("Download");
             waitFor([=](){
                 std::lock_guard<std::mutex> guard(mutex);

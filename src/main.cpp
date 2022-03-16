@@ -10,19 +10,18 @@ int main(int argc, char *argv[])
     std::string mode = argv[3];
     if(argc > 2){
         if(mode.compare("client") == 0){
-            
-            if(argc < 5){
+            if(argc > 5){
+                std::cout  << "4 ";
                 client.Start(argv[1],atoi(argv[2]), getTestTypeFromInt(atoi(argv[4])), atoi(argv[5]));
             }
             else{
+                std::cout  << "5 ";
                 client.Start(argv[1],atoi(argv[2]), getTestTypeFromInt(atoi(argv[4])));
             }
-            
         }
         else{
             server.Start(argv[1],atoi(argv[2]));    
         }
-        
     }else{
         std::cout << "Usage: ./binary 127.0.0.1 5050 server" << std::endl;
         std::cout << "Usage: ./binary 127.0.0.1 5050 client <modeNr> <loops>" << std::endl;
