@@ -16,6 +16,9 @@ private:
     Timepoint start = Timepoint();
     Timepoint stop = Timepoint();
 
+    //File 2
+    std::ofstream steam_2;
+
 public:
 
     static std::string GetUtcString(){
@@ -30,11 +33,18 @@ public:
     }
 
     void CreateFile(std::string filename, std::string testrun, std::string protocol){
+
+        //File 1 for Events
         std::lock_guard<std::mutex> guard(lock);
         this->protocol = protocol;
         stream.open(filename);
         stream << "Start of Testrun: " << testrun << " Start at: " << GetUtcString() << std::endl;
         stream << "UTC,Event,message" << std::endl;
+
+        //File 2 for RTT Events
+        steam_2.open(filename + "RTT");
+        steam_2 << "Start of Testrun: " << testrun << " Start at: " << GetUtcString() << std::endl;
+        steam_2 << "UTC,Event,RTT,Usecase" << std::endl;
     }
 
     void CloseFile(){
@@ -68,14 +78,14 @@ public:
         return std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
     }
 
-    void CreateLogEntry(std::string eventstr, std::string message, Timepoint start, Timepoint stop){
+/*     void CreateLogEntry(std::string eventstr, std::string message, Timepoint start, Timepoint stop){
         std::lock_guard<std::mutex> guard(lock);
         stream << GetUtcString() << "," << eventstr << "," << getTimeDifMicroSec(start, stop) << "," << message << std::endl;
-    }
+    } */
 
     void CreateLogEntry(std::string eventstr, std::string message){
         std::lock_guard<std::mutex> guard(lock);
-        stream  << GetUtcString() << "," << eventstr << "," << getTimeDifMicroSec(this->start, this->stop) << "," << message << std::endl;
+        steam_2  << GetUtcString() << "," << eventstr << "," << getTimeDifMicroSec(this->start, this->stop) << "," << message << std::endl;
     }
 
     void ConnectedEvent(std::string message = ""){
