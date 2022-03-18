@@ -10,6 +10,7 @@ using Timepoint = std::chrono::time_point<std::chrono::steady_clock>;
 class StopWatch {
 private:
     std::mutex lock;
+    std::mutex lock_2;
     std::string filepath;
     std::ofstream stream;
     std::string protocol;
@@ -35,22 +36,35 @@ public:
     void CreateFile(std::string filename, std::string testrun, std::string protocol){
 
         //File 1 for Events
-        std::lock_guard<std::mutex> guard(lock);
-        this->protocol = protocol;
-        stream.open(filename);
-        stream << "Start of Testrun: " << testrun << " Start at: " << GetUtcString() << std::endl;
-        stream << "UTC,Event,message" << std::endl;
+        {
+            std::lock_guard<std::mutex> guard(lock);
+            this->protocol = protocol;
+            stream.open(filename);
+            stream << "Start of Testrun: " << testrun << " Start at: " << GetUtcString() << std::endl;
+            stream << "UTC,Event,message" << std::endl;
+        }
 
-        //File 2 for RTT Events
-        steam_2.open(filename + "RTT");
-        steam_2 << "Start of Testrun: " << testrun << " Start at: " << GetUtcString() << std::endl;
-        steam_2 << "UTC,Event,RTT,Usecase" << std::endl;
+        {
+            //File 2 for RTT Events
+            std::lock_guard<std::mutex> guard(lock_2);
+            steam_2.open(filename + "RTT");
+            steam_2 << "Start of Testrun: " << testrun << " Start at: " << GetUtcString() << std::endl;
+            steam_2 << "UTC,Event,RTT,Usecase" << std::endl;
+        }
+
     }
 
     void CloseFile(){
-        std::lock_guard<std::mutex> guard(lock);
-        stream << "File Closed at: " << GetUtcString() << std::endl;
-        stream.close();
+        {
+            std::lock_guard<std::mutex> guard(lock);
+            stream << "File Closed at: " << GetUtcString() << std::endl;
+            stream.close();
+        }
+        {
+            std::lock_guard<std::mutex> guard(lock_2);
+            stream << "File Closed at: " << GetUtcString() << std::endl;
+            steam_2.close();
+        }
     }
 
     static std::chrono::milliseconds::rep getCurrentTimeMicroSec(){
@@ -84,7 +98,7 @@ public:
     } */
 
     void CreateLogEntry(std::string eventstr, std::string message){
-        std::lock_guard<std::mutex> guard(lock);
+        std::lock_guard<std::mutex> guard(lock_2);
         steam_2  << GetUtcString() << "," << eventstr << "," << getTimeDifMicroSec(this->start, this->stop) << "," << message << std::endl;
     }
 
