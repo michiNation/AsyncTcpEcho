@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/TcpProg.dir/src/main.cpp.o CMakeFiles/TcpProg.dir/src/TcpClient.cpp.o CMakeFiles/TcpProg.dir/src/TcpServer.cpp.o  -o TcpProg  -lpthread 
