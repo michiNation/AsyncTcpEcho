@@ -15,7 +15,7 @@ void TcpServer::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
     if(size > MAXTOSTRING){
         std::string str(&buf[0],&buf[15]);
         message = str;
-    }else{
+    }else{ 
         std::string str(buf);
         message = str;
     }
