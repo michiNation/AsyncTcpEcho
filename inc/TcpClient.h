@@ -49,6 +49,9 @@ static std::string getStringfromTesttype(int i){
 class TcpClient : public IAsyncSocketCallbacks
 {
 private:
+
+    std::string threadID = "";
+
     std::mutex mutex;
     bool isconnected = false;
 
@@ -56,6 +59,7 @@ private:
     bool isreceived = false;
 
     std::unique_ptr<StopWatch> sw = std::make_unique<StopWatch>();
+
     TESTTYPE testType = TESTTYPE::KEYBOARD;
 
     Timepoint start;
@@ -86,4 +90,5 @@ public:
     void Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t loops = 10);
 
     virtual void LOG(std::string log) override;
+
 };
