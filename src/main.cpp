@@ -24,6 +24,9 @@ int main(int argc, char *argv[])
                 std::cout  << "Start with 7 arguments";
        
                 std::vector<std::thread> threads;
+                auto sw = std::make_shared<StopWatch>();
+                sw->CreateFile("TCPTest-SeveralConnections-5%","Nop", "TCP");
+                sw->Connect();
                 uint16_t instances = static_cast<uint16_t>(atoi(argv[6]));
                 for(int i = 0; i < instances; i++){
                     auto c = std::make_shared<TcpClient>();
@@ -36,6 +39,9 @@ int main(int argc, char *argv[])
                     if (th.joinable())
                         th.join();
                 }
+                sw->Disconnect();
+                sw->CreateConnectionTrackingEntry("TCP-StartStopConnection","nothing");
+                sw->CloseFile();
             }
             std::cout  << "something went wrong";
         }

@@ -20,7 +20,8 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         case TESTTYPE::STARTFIRECLOSE:
         {
             sw->Stop();
-            sw->CreateLogEntry("RTT-TCP", "StartFireClose");
+            sw->CreateLogEntry("RTT-TCP-0PL", "StartFireClose");
+            //sw->CreateLogEntry("RTT-TCP-5PL", "StartFireClose");
             std::lock_guard<std::mutex> guard(mutex);
             isreceived = true;
             break;
@@ -28,7 +29,8 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         case TESTTYPE::STARTLOOPCLOSE:
         {
             sw->Stop();
-            sw->CreateLogEntry("RTT-TCP", "StartLoopClose");
+            //sw->CreateLogEntry("RTT-TCP-0PL", "StartLoopClose");
+            sw->CreateLogEntry("RTT-TCP-5PL", "StartFireClose");
             std::lock_guard<std::mutex> guard(mutex);
             isreceived = true;
             break;
@@ -86,6 +88,8 @@ void TcpClient::OnSocketConnectionChanged(ConnectionState state, const AsyncTcpS
     {
         LOG("Disconnected");
         sw->DisconnectedEvent();
+        sw->Disconnect();
+        sw->CreateConnectionTrackingEntry("TCP-StartStopConnection", "nothing");
         sw->CloseFile();
     }
 }
@@ -108,13 +112,13 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
         }; 
     
     asyncSocket = std::make_shared<AsyncTcpSocket>(this);
-
+    sw->Connect();
     if (asyncSocket)
     {
         LOG("Timepoint Start: " +  std::to_string(sw->getCurrentTimeMs()));
         LOG("UseCase: " + std::to_string(testtype) + " Loops:" + std::to_string(loops));
         asyncSocket->ConnectSocketAsync(ip, port);
-        waitFor(checkConnection, 5, 2000);
+        waitFor(checkConnection, 1, 2000);
         asyncSocket->ReadAsync();
 
         switch(testtype)
@@ -162,7 +166,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
             LOG("Timepoint write: " + std::to_string(sw->getCurrentTimeMs()));
             waitFor([=](){
                 std::lock_guard<std::mutex> guard(mutex);
-                return isreceived;}, 2, 5000);
+                return isreceived;}, 1, 5000);
             asyncSocket->TimeToClose();
             asyncSocket->Close();
             LOG("Timepoint closed: " + std::to_string(sw->getCurrentTimeMs()));
@@ -185,7 +189,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
                 asyncSocket->WriteAsync(str.c_str(), str.length());
                     waitFor([=](){
                 std::lock_guard<std::mutex> guard(mutex);
-                return isreceived;}, 2, 5000);
+                return isreceived;}, 1, 5000);
                 {
                     std::lock_guard<std::mutex> guard(mutex);
                     isreceived = false;
@@ -219,7 +223,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
         default:
             break;
         }
-         waitFor([this](){return asyncSocket->IsSocketClosed();}, 10, 5000);
+        waitFor([this](){return asyncSocket->IsSocketClosed();}, 10, 5000);
     }
 }
 
