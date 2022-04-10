@@ -92,7 +92,7 @@ public:
         this->stop = this->getCurrentTime();
     }
 
-        void Connect(){
+    void Connect(){
         std::lock_guard<std::mutex> guard(lock);
         this->connect = this->getCurrentTime();
     }
