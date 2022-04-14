@@ -19,20 +19,21 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         }
         case TESTTYPE::STARTFIRECLOSE:
         {
+
+            std::lock_guard<std::mutex> guard(mutex);
+            isreceived = true;
             sw->Stop();
             sw->CreateLogEntry("RTT-TCP-0PL", "StartFireClose");
             //sw->CreateLogEntry("RTT-TCP-5PL", "StartFireClose");
-            std::lock_guard<std::mutex> guard(mutex);
-            isreceived = true;
             break;
         }
         case TESTTYPE::STARTLOOPCLOSE:
         {
-            sw->Stop();
-            //sw->CreateLogEntry("RTT-TCP-0PL", "StartLoopClose");
-            sw->CreateLogEntry("RTT-TCP-5PL", "StartFireClose");
             std::lock_guard<std::mutex> guard(mutex);
             isreceived = true;
+            sw->Stop();
+            sw->CreateLogEntry("RTT-TCP-0PL", "StartLoopClose");
+            //sw->CreateLogEntry("RTT-TCP-5PL", "StartFireClose");
             break;
         }
         case TESTTYPE::STARTDOWNLOADCLOSE:
@@ -43,7 +44,8 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
                 LOG("Start Download - Filesize: " + std::to_string(fileSize) + " Received Bytes: " + std::to_string(size));
                 downloadFile = std::make_unique<FileAbstraction>(false);
                 //downloadFile->LodeFile("../Files/Files_1/VideoFileDownload.MOV");
-                downloadFile->LodeFile("../Files/Files_1/BigFile1GBdw.zip");
+                downloadFile->LodeFile("../Files/Files_1/videosmDownload.mp4");
+                //downloadFile->LodeFile("../Files/Files_1/BigFile1GBdw.zip");
                 startDownload = true;
                 sw->ReceivedEvent("StartDownload");
             }else{
@@ -59,7 +61,8 @@ void TcpClient::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
                 finishedDownload = true;
                 LOG("Finished Download. Bytessum: " + std::to_string(bytesReceived));
                 sw->Stop();
-                sw->CreateLogEntry("RTT-TCP", "Downloaded");
+                sw->CreateLogEntry("RTT-TCP-0PL", "Downloaded");
+                //sw->CreateLogEntry("RTT-TCP-5PL", "Downloaded");
             }
             
             return;
@@ -175,10 +178,10 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
         case TESTTYPE::STARTLOOPCLOSE:
         {
             //todo check if file input is read
-            FileAbstraction fa(true);
-            fa.LodeFile("../Files/Files_1/MaxPackageFile");
-            size_t filesize = fa.GetFileSize();
-            std::vector<uint8_t> v = fa.ReadBytes(filesize);
+            std::unique_ptr<FileAbstraction> fa = std::make_unique<FileAbstraction>(true);
+            fa->LodeFile("../Files/Files_1/MaxPackageFile");
+            size_t filesize = fa->GetFileSize();
+            std::vector<uint8_t> v = fa->ReadBytes(filesize);
             std::string str(v.begin(), v.begin()+15);
             int i = 0;
             LOG("Loops: " + loops);
@@ -198,7 +201,7 @@ void TcpClient::Start(std::string ip, uint16_t port, TESTTYPE testtype, uint16_t
             }
             asyncSocket->TimeToClose();
             asyncSocket->Close();
-            fa.CloseFile();
+            fa->CloseFile();
             break;
         }
         case TESTTYPE::STARTDOWNLOADCLOSE:

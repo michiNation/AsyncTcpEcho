@@ -1,6 +1,9 @@
 #include "TcpServer.h"
 #include "TcpServerSocket.h"
-#include "FileAbstraction.h"
+
+TcpServer::~TcpServer(){
+    sa2->CloseFile();
+}
 
 void TcpServer::OnNewConnection(std::shared_ptr<AsyncTcpSocket> socket)
 {
@@ -10,6 +13,7 @@ void TcpServer::OnNewConnection(std::shared_ptr<AsyncTcpSocket> socket)
 
 void TcpServer::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket* socket)
 {
+     
     if(size <= 0){return;}
     std::string message = "";
     if(size > MAXTOSTRING){
@@ -19,9 +23,12 @@ void TcpServer::OnBytesReceived(const char *buf, int size, const AsyncTcpSocket*
         std::string str(buf);
         message = str;
     }
+    sa2->SendEvent("OnBytesReceived " + message + " Socketadress: " + socket->ClientAddress());
     auto found = message.find("Download");
     if(found != std::string::npos){
-        StartDownload(socket);
+        std::thread a{&TcpServer::StartDownload,this, socket};
+        a.detach();
+        //StartDownload(socket);
     }
     else{
         LOG("Recived from " + socket->ClientAddress() + " size: " + std::to_string(size) + " : " + message);
@@ -34,10 +41,8 @@ void TcpServer::StartDownload(const AsyncTcpSocket* socket){
     //prep stuff
     uint16_t CHUNCKSIZE = 65000;
     LOG("Download requested");
-    FileAbstraction fa(true);
-    //fa.LodeFile("../Files/video.MOV");
-    fa.LodeFile("../Files/BigFile1GB.zip");
-    auto size = fa.GetFileSize();
+    //FileAbstraction fa();
+    auto size = fa->GetFileSize();
     std::vector<uint8_t> v(CHUNCKSIZE);
     
     //send file size
@@ -53,7 +58,7 @@ void TcpServer::StartDownload(const AsyncTcpSocket* socket){
             CHUNCKSIZE = size;
             size = 0;
         }
-        v = fa.ReadBytes(CHUNCKSIZE);
+        v = fa->ReadBytes(CHUNCKSIZE);
         auto sent = socket->Write((const char *)&v[0], v.size());
         LOG("Size: " + std::to_string(size) + " sent: " + std::to_string(sent));
     }
@@ -61,6 +66,7 @@ void TcpServer::StartDownload(const AsyncTcpSocket* socket){
 
 void TcpServer::OnSocketConnectionChanged(ConnectionState state, const AsyncTcpSocket* sock)
 {
+    sa2->SendEvent("OnSocketConnectionChanged " + sock->ClientAddress());
     if (ConnectionState::Connected == state)
     {
         LOG("Connected " + sock->ClientAddress());
@@ -78,6 +84,10 @@ void TcpServer::OnBytesWritten(int bytes)
 }
 
 void TcpServer::Start(std::string ip, uint16_t port){
+    sa2->CreateFile("ServerTracking.txt", "testrun1", "tcp");
+    //fa->LodeFile("../Files/Files_1/video.MOV");
+    fa->LodeFile("../Files/Files_1/videosm.mp4");
+    //fa->LodeFile("../Files/Files_1/BigFile1GB.zip");
 
     auto server = std::make_shared<TcpServerSocket>(this);
 

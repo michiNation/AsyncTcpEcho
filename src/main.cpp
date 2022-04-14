@@ -22,15 +22,23 @@ int main(int argc, char *argv[])
             }
             else if(argc == 7){
                 std::cout  << "Start with 7 arguments";
-       
                 std::vector<std::thread> threads;
                 auto sw = std::make_shared<StopWatch>();
-                sw->CreateFile("TCPTest-SeveralConnections-5%","Nop", "TCP");
+                sw->CreateFile("TCPTest-SeveralConnections-0%","Nop", "TCP");
                 sw->Connect();
+
+                int usecase = atoi(argv[4]);
+                if(getTestTypeFromInt(usecase) == TESTTYPE::STARTFIREDOWNLOADCLOSE){
+                    auto c = std::make_shared<TcpClient>();
+                    auto f = [c, argv](){c->Start(argv[1],atoi(argv[2]), getTestTypeFromInt(3));};
+                    threads.push_back(std::thread{f}); 
+                    usecase = 2;
+                }
+
                 uint16_t instances = static_cast<uint16_t>(atoi(argv[6]));
                 for(int i = 0; i < instances; i++){
                     auto c = std::make_shared<TcpClient>();
-                    auto f = [c, argv](){c->Start(argv[1],atoi(argv[2]), getTestTypeFromInt(atoi(argv[4])), atoi(argv[5]));};
+                    auto f = [c, argv, usecase](){c->Start(argv[1],atoi(argv[2]), getTestTypeFromInt(usecase), atoi(argv[5]));};
                     threads.push_back(std::thread{f});    
                 }
                 for (std::thread & th : threads)
